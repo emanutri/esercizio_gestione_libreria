@@ -33,21 +33,30 @@ public class ExecuteModificaLibroServlet extends HttpServlet {
 
 		Date dataPubblicazioneParsed = UtilityLibroForm.parseDatePubblicazioneFromString(dataPubblicazioneStringParam);
 
-		if (pagineInputStringParam == null || pagineInputStringParam.equals(""))
-			pagineInputStringParam = "0";
-
-		Libro libroInstance = new Libro(titoloInputParam, genereInputParam, Integer.parseInt(pagineInputStringParam),
-				dataPubblicazioneParsed);
+		Libro libroInstance = new Libro();
 		libroInstance.setId(Long.parseLong(idLibroDaModificare));
 
 		if (!UtilityLibroForm.validateInput(titoloInputParam, genereInputParam, pagineInputStringParam,
 				dataPubblicazioneStringParam) || dataPubblicazioneParsed == null) {
+
+			libroInstance.setTitolo(titoloInputParam);
+			libroInstance.setGenere(genereInputParam);
+			if (!pagineInputStringParam.isEmpty()) {
+				libroInstance.setPagine(Integer.parseInt(pagineInputStringParam));
+			}
+			libroInstance.setDataPubblicazione(dataPubblicazioneParsed);
+
 			request.setAttribute("errorMessage", "Attenzione sono presenti errori di validazione");
 			request.setAttribute("libroDaModificare", libroInstance);
 			request.getRequestDispatcher("/libro/edit.jsp").forward(request, response);
 			return;
 		}
 		try {
+
+			libroInstance.setTitolo(titoloInputParam);
+			libroInstance.setGenere(genereInputParam);
+			libroInstance.setPagine(Integer.parseInt(pagineInputStringParam));
+			libroInstance.setDataPubblicazione(dataPubblicazioneParsed);
 
 			MyServiceFactory.getLibroServiceInstance().aggiorna(libroInstance);
 

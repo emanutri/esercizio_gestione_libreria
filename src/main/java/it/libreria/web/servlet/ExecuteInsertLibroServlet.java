@@ -35,21 +35,38 @@ public class ExecuteInsertLibroServlet extends HttpServlet {
 		// a questo punto lo incapsulo in un metodo apposito
 		Date dataPubblicazioneParsed = UtilityLibroForm.parseDatePubblicazioneFromString(dataPubblicazioneStringParam);
 
+		Libro libroInstance = new Libro();
+
 		// valido input tramite apposito metodo e se la validazione fallisce torno in
 		// pagina
 		if (!UtilityLibroForm.validateInput(titoloInputParam, genereInputParam, pagineInputStringParam,
 				dataPubblicazioneStringParam) || dataPubblicazioneParsed == null) {
 			request.setAttribute("errorMessage", "Attenzione sono presenti errori di validazione");
+
+			libroInstance.setTitolo(titoloInputParam);
+			libroInstance.setGenere(genereInputParam);
+			if (!pagineInputStringParam.isEmpty())
+				libroInstance.setPagine(Integer.parseInt(pagineInputStringParam));
+			libroInstance.setDataPubblicazione(dataPubblicazioneParsed);
+
+			request.setAttribute("libroDaInserire", libroInstance);
+			
 			request.getRequestDispatcher("/libro/insert.jsp").forward(request, response);
 			return;
 		}
 
-		// se sono qui i valori sono ok quindi posso creare l'oggetto da inserire
-		Libro libroInstance = new Libro(titoloInputParam, genereInputParam, Integer.parseInt(pagineInputStringParam),
-				dataPubblicazioneParsed);
+		libroInstance.setTitolo(titoloInputParam);
+		libroInstance.setGenere(genereInputParam);
+		libroInstance.setPagine(Integer.parseInt(pagineInputStringParam));
+		libroInstance.setDataPubblicazione(dataPubblicazioneParsed);
 
 		// occupiamoci delle operazioni di business
 		try {
+			libroInstance.setTitolo(titoloInputParam);
+			libroInstance.setGenere(genereInputParam);
+			libroInstance.setPagine(Integer.parseInt(pagineInputStringParam));
+			libroInstance.setDataPubblicazione(dataPubblicazioneParsed);
+
 			MyServiceFactory.getLibroServiceInstance().inserisciNuovo(libroInstance);
 			request.setAttribute("listaLibriAttribute", MyServiceFactory.getLibroServiceInstance().listAll());
 			request.setAttribute("successMessage", "Operazione effettuata con successo");

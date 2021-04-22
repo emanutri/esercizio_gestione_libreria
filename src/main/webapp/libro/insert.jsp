@@ -1,4 +1,6 @@
 <!doctype html>
+<%@page import="it.libreria.model.Libro"%>
+<%@page import="java.text.SimpleDateFormat" %>
 <html lang="it">
 <head>
 <jsp:include page="../header.jsp" />
@@ -12,7 +14,7 @@
 	<jsp:include page="../navbar.jsp" />
 
 	<main role="main" class="container">
-
+		<%Libro libroDaInsertServlet = (Libro) request.getAttribute("libroDaInserire"); %>
 		<div
 			class="alert alert-danger alert-dismissible fade show ${errorMessage==null?'d-none': ''}"
 			role="alert">
@@ -40,14 +42,14 @@
 					<div class="form-row">
 
 						<div class="form-group col-md-6">
-							<label>Titolo <span class="text-danger">*</span></label> <input
-								type="text" name="titolo" id="titolo" class="form-control"
-								placeholder="Inserire il titolo" required>
+							<label>Titolo <span class="text-danger">*</span></label> 
+							<input type="text" name="titolo" id="titolo" class="form-control" value="<%= libroDaInsertServlet.getTitolo()!= null? libroDaInsertServlet.getTitolo():""%>"
+								placeholder="Inserire il titolo" required >
 						</div>
 
 						<div class="form-group col-md-6">
-							<label>Genere <span class="text-danger">*</span></label> <input
-								type="text" name="genere" id="genere" class="form-control"
+							<label>Genere <span class="text-danger">*</span></label> 
+							<input	type="text" name="genere" id="genere" class="form-control" value="<%= libroDaInsertServlet.getGenere()!= null?libroDaInsertServlet.getGenere():"" %>"
 								placeholder="Inserire il genere" required>
 						</div>
 					</div>
@@ -55,13 +57,13 @@
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label>Pagine <span class="text-danger">*</span></label> <input
-								type="number" class="form-control" name="pagine" id="pagine"
+								type="number" class="form-control" name="pagine" id="pagine" value="<%= libroDaInsertServlet.getPagine()!= null?libroDaInsertServlet.getPagine():"" %>"
 								placeholder="Inserire numero pagine" required>
 						</div>
 						
 						<div class="form-group col-md-3">
 							<label>Data di Pubblicazione<span class="text-danger">*</span></label>
-							<input class="form-control" id="dataPubblicazione" type="date"
+							<input class="form-control" id="dataPubblicazione" type="date" value="<%=libroDaInsertServlet.getDataPubblicazione()!=null? new SimpleDateFormat("yyyy-MM-dd").format(libroDaInsertServlet.getDataPubblicazione()):""%>"
 								placeholder="dd/MM/yy" title="formato : gg/mm/aaaa"
 								name="dataPubblicazione" required>
 						</div>
